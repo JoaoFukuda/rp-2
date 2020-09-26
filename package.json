@@ -1,0 +1,28 @@
+{
+  "name": "rp-2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "license": "MIT",
+  "author": "Rodrigo Moraes",
+  "scripts": {
+    "test": "jest"
+  },
+  "workspaces": {
+    "packages": [
+      "packages/*",
+      "packages/shared/*"
+    ]
+  },
+  "dependencies": {
+    "@rp-2/axios": "*"
+  },
+  "devDependencies": {
+    "@rp-2/dotenv": "*",
+    "@rp-2/eslint": "*",
+    "@types/jest": "^24.0.9",
+    "jest": "^24.9.0",
+    "ts-jest": "^26.1.4",
+    "typescript": "^3.9.7"
+  }
+}
