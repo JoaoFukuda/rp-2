@@ -35,7 +35,7 @@ const create = async (req: Request, res: Response) => {
 
     await transaction.commit()
 
-    return res.status(201)
+    return res.sendStatus(201)
   } catch (err) {
     await transaction.rollback()
 

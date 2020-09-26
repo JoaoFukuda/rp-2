@@ -32,7 +32,7 @@ export default function TeacherForm() {
     }).then(() => {
       alert('Cadastro realizado com sucesso!')
       history.push('/')
-    }).catch(() => alert('Erro no cadastro!'))
+    }).catch(error => alert(error.message || 'Erro no cadastro!'))
   }
 
   return (

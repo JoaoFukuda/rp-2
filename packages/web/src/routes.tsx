@@ -7,7 +7,7 @@ import TeacherForm from './pages/TeacherForm.tsx'
 export default function Routes() {
   return (
     <BrowserRouter>
-      <Route path='/' component={TeacherList} />
+      <Route path='/' component={TeacherList} exact />
       <Route path='/cadastrar-materiais' component={TeacherForm} />
     </BrowserRouter>
   )
