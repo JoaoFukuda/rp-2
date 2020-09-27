@@ -1,7 +1,5 @@
 import React, { TextareaHTMLAttributes } from 'react'
 
-import './styles.css'
-
 type TextareaProps = {
   name: string
   label: string

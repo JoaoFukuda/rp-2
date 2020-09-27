@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 
 import Logo from '../Logo'
 import backIcon from '../../assets/images/icons/back.svg'
-import './styles.css'
 
 type PageHeaderProps = {
   title: string

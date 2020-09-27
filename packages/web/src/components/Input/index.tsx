@@ -1,7 +1,5 @@
 import React, { InputHTMLAttributes } from 'react'
 
-import './styles.css'
-
 type InputProps = {
   name: string
   label: string

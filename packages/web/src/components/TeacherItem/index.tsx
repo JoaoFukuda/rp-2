@@ -1,7 +1,6 @@
 import React from 'react'
 
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg'
-import './styles.css'
 
 export type Teacher = {
   avatar: string
@@ -33,7 +32,7 @@ export default function TeacherItem({ teacher }: TeacherItemProps) {
 
       <footer>
         <p>
-          Material
+          Material:
           <strong>{material}</strong>
         </p>
         <a

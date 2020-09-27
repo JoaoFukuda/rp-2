@@ -1,7 +1,5 @@
 import React, { SelectHTMLAttributes } from 'react'
 
-import './styles.css'
-
 type SelectProps = {
   name: string
   label: string

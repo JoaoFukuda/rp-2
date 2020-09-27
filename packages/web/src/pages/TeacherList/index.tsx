@@ -4,14 +4,13 @@ import api from '@rp-2/axios'
 import PageHeader from '../../components/PageHeader'
 import TeacherItem, { Teacher } from '../../components/TeacherItem'
 import Select from '../../components/Select'
-import './styles.css'
 
 export default function TeacherList() {
   const [subject, setSubject] = useState('')
-  const [teachers, setTeachers] = useState<Array<Teacher>>([])
+  const [teachers, setTeachers] = useState<Teacher[]>([])
 
   useEffect(() => {
-    requestTeachers(subject).then(data => setTeachers(data))
+    requestTeachers(subject).then(teachers => setTeachers(teachers))
   }, [subject])
 
   return (
@@ -32,7 +31,6 @@ export default function TeacherList() {
           />
         </form>
       </PageHeader>
-
       <main>
         {teachers.map((teacher, index) => (
           <TeacherItem key={index} teacher={teacher} />
@@ -42,14 +40,10 @@ export default function TeacherList() {
   )
 }
 
-const requestTeachers = async (subject: string) => {
+const requestTeachers = async (subject: string): Promise<Teacher[]> => {
   try {
-    const classes: Array<Teacher> = await api.get('classes', {
-      params: {
-        subject,
-      },
-    })
-    return classes
+    const { data } = await api.get('classes', { params: { subject } })
+    return data
   } catch (error) {
     alert(error.message || 'Nenhum professor foi encontrado')
     return []
