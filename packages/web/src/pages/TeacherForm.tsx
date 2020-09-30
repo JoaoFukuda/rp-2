@@ -6,18 +6,16 @@ import {
   CardActions,
   CardContent,
   Divider,
-  FormControl,
   Icon,
-  InputLabel,
-  MenuItem,
-  Select,
   TextField,
   Typography,
   makeStyles,
+  Theme,
 } from '@material-ui/core'
 import api from '@rp-2/axios'
 
-import PageHeader from '../../components/PageHeader'
+import PageHeader from '../components/PageHeader'
+import SubjectSelect from '../components/SubjectSelect'
 
 export default function TeacherForm() {
   const classes = useStyles()
@@ -48,7 +46,7 @@ export default function TeacherForm() {
     <>
       <PageHeader
         title='Que incrível que você quer cadastrar seu material de aula.'
-        description='O primeiro passo é preencher esse formulário de inscrição'
+        description='O primeiro passo é preencher esse formulário de inscrição!'
       />
 
       <Card className={classes.card}>
@@ -93,20 +91,7 @@ export default function TeacherForm() {
           <Typography variant='h3' className={classes.sectionHeader}>Sobre a aula</Typography>
           <Divider />
 
-          <FormControl variant='outlined' margin='normal'>
-            <InputLabel>Matéria</InputLabel>
-            <Select
-              name='subject'
-              label='Matéria'
-              value={subject}
-              onChange={({ target }) => setSubject(target.value as string)}
-            >
-              <MenuItem value='Artes'>Artes</MenuItem>
-              <MenuItem value='História'>História</MenuItem>
-              <MenuItem value='Matemática'>Matemática</MenuItem>
-              <MenuItem value='Cubo Mágico'>Cubo Mágico</MenuItem>
-            </Select>
-          </FormControl>
+          <SubjectSelect subject={subject} onChange={({ target }) => setSubject(target.value as string)} />
           <TextField
             name='material'
             label='Material de aula'
@@ -143,7 +128,7 @@ export default function TeacherForm() {
   )
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: Theme) => ({
   actionsContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -160,8 +145,14 @@ const useStyles = makeStyles({
     marginBottom: '2rem',
   },
   card: {
-    margin: '4rem',
+    marginTop: '2rem',
+    marginLeft: '6rem',
+    marginRight: '6rem',
+    marginBottom: '3rem',
     padding: '2rem',
+    border: '1px solid',
+    borderRadius: '1rem',
+    borderColor: theme.palette.primary.dark,
   },
   cardActions: {
     display: 'flex',
@@ -176,4 +167,4 @@ const useStyles = makeStyles({
   sectionHeader: {
     marginBottom: '1rem',
   },
-})
+}))

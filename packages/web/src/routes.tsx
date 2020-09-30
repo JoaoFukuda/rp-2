@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 
 import TeacherList from './pages/TeacherList'
-import TeacherForm from './pages/TeacherForm.tsx'
+import TeacherForm from './pages/TeacherForm'
 
 export default function Routes() {
   return (
