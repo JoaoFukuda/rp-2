@@ -2,7 +2,7 @@ import React from 'react'
 import { ThemeProvider } from '@material-ui/core/styles'
 import { CssBaseline } from '@material-ui/core'
 
-import Routes from './routes'
+import Routes from './Routes'
 import theme from './assets/theme'
 
 export default function App() {

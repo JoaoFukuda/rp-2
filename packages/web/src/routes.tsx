@@ -1,13 +1,15 @@
 import React from 'react'
 import { BrowserRouter, Route } from 'react-router-dom'
 
-import TeacherList from './pages/TeacherList'
+import Home from './pages/Home'
+import MaterialList from './pages/MaterialList'
 import TeacherForm from './pages/TeacherForm'
 
 export default function Routes() {
   return (
     <BrowserRouter>
-      <Route path='/' component={TeacherList} exact />
+      <Route path='/' component={Home} exact />
+      <Route path='/materiais' component={MaterialList} />
       <Route path='/cadastrar-materiais' component={TeacherForm} />
     </BrowserRouter>
   )

@@ -1,26 +1,16 @@
-import React, { PropsWithChildren } from 'react'
-
+import React from 'react'
 import { Container, makeStyles, Theme, Typography } from '@material-ui/core'
 
-type PageHeaderProps = {
-  title: string
-  description?: string
-}
+type PageHeaderProps = { title: string }
 
-export default function PageHeader({
-  children,
-  title,
-  description,
-}: PropsWithChildren<PageHeaderProps>) {
+export default function PageHeader({ title }: PageHeaderProps) {
   const classes = useStyles()
 
   return (
     <Container className={classes.container}>
-      <Typography variant='h5' className={classes.text}>
-        <strong>{title}</strong>
-        {description && <p>{description}</p>}
+      <Typography variant='h3' className={classes.text}>
+        {title}
       </Typography>
-      {children}
     </Container>
   )
 }

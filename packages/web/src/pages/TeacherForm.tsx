@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import {
   Button,
   Card,
@@ -12,43 +11,21 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core'
-import api from '@rp-2/axios'
 
 import PageHeader from '../components/PageHeader'
-import SubjectSelect from '../components/SubjectSelect'
 
 export default function TeacherForm() {
   const classes = useStyles()
-  const history = useHistory()
 
   const [avatar, setAvatar] = useState('')
   const [bio, setBio] = useState('')
   const [material, setMaterial] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
-  const [subject, setSubject] = useState('')
-
-  const handleCreateClass = () => {
-    api.post('classes', {
-      avatar,
-      bio,
-      material,
-      name,
-      phone,
-      subject,
-    }).then(() => {
-      alert('Cadastro realizado com sucesso!')
-      history.push('/')
-    }).catch(error => alert(error.message || 'Erro no cadastro!'))
-  }
 
   return (
     <>
-      <PageHeader
-        title='Que incrível que você quer cadastrar seu material de aula.'
-        description='O primeiro passo é preencher esse formulário de inscrição!'
-      />
-
+      <PageHeader title='Cadastrar materiais de aula'/>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant='h3' className={classes.sectionHeader}>Seus dados</Typography>
@@ -91,7 +68,6 @@ export default function TeacherForm() {
           <Typography variant='h3' className={classes.sectionHeader}>Sobre a aula</Typography>
           <Divider />
 
-          <SubjectSelect subject={subject} onChange={({ target }) => setSubject(target.value as string)} />
           <TextField
             name='material'
             label='Material de aula'
@@ -115,7 +91,6 @@ export default function TeacherForm() {
             </div>
           </div>
           <Button
-            onClick={handleCreateClass}
             color='secondary'
             variant='contained'
             size='large'
