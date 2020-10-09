@@ -79,7 +79,7 @@ export default function TeacherForm() {
             margin='normal'
           />
 
-          <Typography variant='h3' className={classes.sectionHeader}>Sobre a aula</Typography>
+          <Typography variant='h3' className={classes.sectionHeader}>Material</Typography>
           <Divider />
 
           <TextField

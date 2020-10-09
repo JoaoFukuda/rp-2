@@ -10,4 +10,5 @@ app.use(cors())
 app.use(express.json())
 app.use(routes)
 
+console.log(`Running on port ${port}`)
 app.listen(port)

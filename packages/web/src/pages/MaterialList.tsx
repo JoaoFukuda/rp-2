@@ -8,8 +8,10 @@ import {
   Theme,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import api from '@rp-2/axios'
+
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 import PageHeader from '../components/PageHeader'
 
@@ -20,16 +22,30 @@ type MaterialListState = {
 export default function MaterialList() {
   const { state } = useLocation<MaterialListState>()
   const [materials, setMaterials] = useState<Material[]>([])
+  const history = useHistory()
+
+  useEffect(() => {
+    SpeechRecognition.startListening({ language: 'pt-BR', continuous: true })
+  }, [])
 
   useEffect(() => {
     requestMaterials(state?.query || '').then(setMaterials)
   }, [state])
 
+  const commands = [
+    {
+      command: 'voltar',
+      callback: () => history.push('/'),
+    },
+  ]
+
+  useSpeechRecognition({ commands })
+
   const { container, head, cell } = useStyles()
 
   return (
     <>
-      <PageHeader title='Encontramos X materiais para você' />
+      <PageHeader title={`Encontramos ${materials.length} material para a pesquisa: "${state.query}"`} />
       <Container className={container} component={Paper}>
         <Table>
           <TableRow className={head}>

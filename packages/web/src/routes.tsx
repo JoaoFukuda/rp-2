@@ -10,7 +10,7 @@ export default function Routes() {
     <BrowserRouter>
       <Route path='/' component={Home} exact />
       <Route path='/materiais' component={MaterialList} />
-      <Route path='/cadastrar-materiais' component={TeacherForm} />
+      <Route path='/cadastrar' component={TeacherForm} />
     </BrowserRouter>
   )
 }
