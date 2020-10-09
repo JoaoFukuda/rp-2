@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core'
 
 import PageHeader from '../components/PageHeader'
+import api from '@rp-2/axios'
 
 export default function TeacherForm() {
   const classes = useStyles()
@@ -22,6 +23,19 @@ export default function TeacherForm() {
   const [material, setMaterial] = useState('')
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
+
+  const handleCreateClass = () => {
+    api.post('classes', {
+      avatar,
+      bio,
+      material,
+      name,
+      phone,
+      subject: material,
+    }).then(() => {
+      alert('Cadastro realizado com sucesso!')
+    }).catch(() => alert('Erro no cadastro!'))
+  }
 
   return (
     <>
@@ -94,6 +108,7 @@ export default function TeacherForm() {
             color='secondary'
             variant='contained'
             size='large'
+            onClick={handleCreateClass}
           >
               Salvar cadastro
           </Button>
