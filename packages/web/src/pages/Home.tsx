@@ -82,7 +82,7 @@ export default function TeacherList() {
       <p>{transcript}</p>
 
       <p className='textoRegistro'>Deseja inserir um novo material? <Link to='/cadastrar' className='link'>Registre-se</Link></p>
-      <p className='textoRegistro'>Já possui conta? <Link to='/' className='link'>Login</Link></p>
+      <p className='textoRegistro'>Já possui conta? <Link to='/login' className='link'>Login</Link></p>
       {/* <div>
         <textarea
           value={value}

@@ -1,0 +1,19 @@
+.leftIcon {
+    margin-right: 15px;
+}
+
+.listIcons {
+    height: 30px !important;
+    width: 30px !important;
+    color: #fff;
+    cursor: pointer;
+}
+
+.listIcons:hover {
+    color: #b3b2b2;
+}
+
+.btnContainer {
+    text-align: right !important;
+    padding: 20px 0 !important;
+}
