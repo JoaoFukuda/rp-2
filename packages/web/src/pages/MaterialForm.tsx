@@ -11,30 +11,29 @@ import {
   makeStyles,
   Theme,
 } from '@material-ui/core'
+import { DropzoneArea } from 'material-ui-dropzone'
 
 import PageHeader from '../components/PageHeader'
 import api from '@rp-2/axios'
 
-export default function TeacherForm() {
+export default function MaterialForm() {
   const classes = useStyles()
 
-  const [avatar, setAvatar] = useState('')
-  const [bio, setBio] = useState('')
-  const [material, setMaterial] = useState('')
-  const [name, setName] = useState('')
-  const [phone, setPhone] = useState('')
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [lesson, setLesson] = useState('')
+  const [file, setFile] = useState<File>()
 
-  const handleCreateClass = () => {
-    api.post('classes', {
-      avatar,
-      bio,
-      material,
-      name,
-      phone,
-      subject: material,
+  const addMaterial = () => {
+    api.post('materials', {
+      title,
+      author,
+      lesson,
+      file,
+      teacherId: 1,
     }).then(() => {
-      alert('Cadastro realizado com sucesso!')
-    }).catch(() => alert('Erro no cadastro!'))
+      alert('Material adicionado com sucesso!')
+    }).catch(() => alert('Erro ao adicionar material!'))
   }
 
   return (
@@ -42,53 +41,39 @@ export default function TeacherForm() {
       <PageHeader title='Cadastrar materiais de aula'/>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <Typography variant='h3' className={classes.sectionHeader}>Seus dados</Typography>
+          <Typography variant='h3' className={classes.sectionHeader}>Dados do material</Typography>
           <Divider />
           <TextField
-            name='name'
-            label='Nome completo'
-            value={name}
-            onChange={({ target }) => setName(target.value)}
+            name='title'
+            label='Título'
+            value={title}
+            onChange={({ target }) => setTitle(target.value)}
             variant='outlined'
             margin='normal'
           />
           <TextField
-            name='avatar'
-            label='Avatar'
-            value={avatar}
-            onChange={({ target }) => setAvatar(target.value)}
+            name='author'
+            label='Autor'
+            value={author}
+            onChange={({ target }) => setAuthor(target.value)}
             variant='outlined'
             margin='normal'
           />
           <TextField
-            name='phone'
-            label='Celular'
-            value={phone}
-            onChange={({ target }) => setPhone(target.value)}
-            variant='outlined'
-            margin='normal'
-          />
-          <TextField
-            className={classes.bio}
-            multiline
-            name='bio'
-            label='Biografia'
-            value={bio}
-            onChange={({ target }) => setBio(target.value)}
+            className={classes.marginBottom}
+            name='lesson'
+            label='Aula'
+            value={lesson}
+            onChange={({ target }) => setLesson(target.value)}
             variant='outlined'
             margin='normal'
           />
 
-          <Typography variant='h3' className={classes.sectionHeader}>Material</Typography>
-          <Divider />
-
-          <TextField
-            name='material'
-            label='Material de aula'
-            value={material}
-            onChange={({ target }) => setMaterial(target.value)}
-            variant='outlined'
-            margin='normal'
+          <Typography variant='h3' className={classes.sectionHeader}>Upload do material</Typography>
+          <Divider className={classes.marginBottom} />
+          <DropzoneArea
+            dropzoneText='Arraste um arquivo ou clique aqui para fazer o upload'
+            onChange={files => setFile(files[0])}
           />
         </CardContent>
 
@@ -100,7 +85,7 @@ export default function TeacherForm() {
                 Importante!
               </Typography>
               <Typography>
-                Preencha todos os dados
+                Cuidado com erros de digitação
               </Typography>
             </div>
           </div>
@@ -108,9 +93,9 @@ export default function TeacherForm() {
             color='secondary'
             variant='contained'
             size='large'
-            onClick={handleCreateClass}
+            onClick={addMaterial}
           >
-              Salvar cadastro
+              Cadastrar material
           </Button>
         </CardActions>
       </Card>
@@ -131,7 +116,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
-  bio: {
+  marginBottom: {
     marginBottom: '2rem',
   },
   card: {

@@ -3,11 +3,13 @@ import { BrowserRouter, Route } from 'react-router-dom'
 
 import Home from './pages/Home'
 import MaterialList from './pages/MaterialList'
-import TeacherForm from './pages/TeacherForm'
 import Register from './pages/Register'
 import Login from './pages/Login'
 import UserMaterialList from './pages/UserMaterialList'
 import Material from './pages/Material'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import MaterialForm from './pages/MaterialForm'
 
 export default function Routes() {
   return (
@@ -15,9 +17,12 @@ export default function Routes() {
       <Route path='/' component={Home} exact />
       <Route path='/materiais' component={MaterialList} />
       <Route path='/cadastrar' component={Register} />
-      <Route path='/login' component={Login} />
-      <Route path='/usermaterials' component={UserMaterialList} />
+      <Route path='/entrar' component={Login} />
+      <Route path='/materiais-do-professor' component={UserMaterialList} />
       <Route path='/material' component={Material} />
+      <Route path='/cadastrar-materiais' component={MaterialForm} />
+      <Route path='/cadastrar' component={SignUp} />
+      <Route path='/entrar' component={SignIn} />
     </BrowserRouter>
   )
 }
