@@ -8,12 +8,11 @@ import {
   Theme,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import api from '@rp-2/axios'
 
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
-
 import PageHeader from '../components/PageHeader'
+import SearchForm from '../components/SearchForm'
 
 type MaterialListState = {
   query: string
@@ -22,57 +21,46 @@ type MaterialListState = {
 export default function MaterialList() {
   const { state } = useLocation<MaterialListState>()
   const [materials, setMaterials] = useState<Material[]>([])
-  const history = useHistory()
+  const query = state?.query
 
   useEffect(() => {
-    SpeechRecognition.startListening({ language: 'pt-BR', continuous: true })
-  }, [])
+    requestMaterials(query || '').then(setMaterials)
+  }, [query])
 
-  useEffect(() => {
-    requestMaterials(state?.query || '').then(setMaterials)
-  }, [state])
-
-  const commands = [
-    {
-      command: 'voltar',
-      callback: () => history.push('/'),
-    },
-  ]
-
-  useSpeechRecognition({ commands })
-
-  const { container, head, cell } = useStyles()
+  const { container, head, cell, searchContainer } = useStyles()
 
   return (
     <>
-      <PageHeader title={`Encontramos ${materials.length} material para a pesquisa: "${state.query}"`} />
+      <PageHeader title={`Encontramos ${materials.length} materiais para: "${query}"`} />
       <Container className={container} component={Paper}>
         <Table>
-          <TableRow className={head}>
-            <TableCell className={cell}>Título</TableCell>
-            <TableCell className={cell}>Professor</TableCell>
-          </TableRow>
-          {materials.map(({ name, material }) => (
-            <TableRow key={name}>
-              <TableCell className={cell}>{material}</TableCell>
-              <TableCell className={cell}>{name}</TableCell>
+          <tbody>
+            <TableRow className={head}>
+              <TableCell className={cell}>Título</TableCell>
+              <TableCell className={cell}>Professor</TableCell>
             </TableRow>
-          ))}
+            {materials.map(({ name, material }) => (
+              <TableRow key={material}>
+                <TableCell className={cell}>{material}</TableCell>
+                <TableCell className={cell}>{name}</TableCell>
+              </TableRow>
+            ))}
+          </tbody>
         </Table>
+      </Container>
+      <Container component={Paper} className={searchContainer}>
+        <SearchForm />
       </Container>
     </>
   )
 }
 
 type Material = {
-  avatar: string
-  bio: string
   material: string
   name: string
-  phone: string
-  subject: string
   userId: string
 }
+
 const requestMaterials = async (subject: string): Promise<Material[]> => {
   try {
     const { data } = await api.get('classes', { params: { subject } })
@@ -95,5 +83,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   cell: {
     fontSize: '2rem',
+  },
+  searchContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+    paddingTop: '1rem',
+    marginTop: '2rem',
+    marginBottom: '2rem',
+    border: '1px solid',
+    borderColor: theme.palette.primary.dark,
   },
 }))

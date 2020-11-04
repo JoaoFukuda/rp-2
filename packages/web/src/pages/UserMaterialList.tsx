@@ -8,23 +8,14 @@ import {
   TableHead,
   TableBody,
   Theme,
-  Button
+  Button,
 } from '@material-ui/core'
 import EditIcon from '@material-ui/icons/Edit'
 import DeleteIcon from '@material-ui/icons/Delete'
-import React, { useEffect, useState } from 'react'
-import { useLocation, useHistory } from 'react-router-dom'
-import api from '@rp-2/axios'
-
-import '../styles/userMaterialList.css'
-
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 import PageHeader from '../components/PageHeader'
-
-type MaterialListState = {
-  query: string
-}
 
 type Material = {
   id: number,
@@ -34,7 +25,6 @@ type Material = {
 }
 
 export default function UserMaterialList() {
-  const { state } = useLocation<MaterialListState>()
   const [materials, setMaterials] = useState<Material[]>([
     {
       id: 1,
@@ -45,29 +35,12 @@ export default function UserMaterialList() {
   ])
   const history = useHistory()
 
-  useEffect(() => {
-    SpeechRecognition.startListening({ language: 'pt-BR', continuous: true })
-  }, [])
-
-  // useEffect(() => {
-  //   requestMaterials(state?.query || '').then(setMaterials)
-  // }, [state])
-
-  const commands = [
-    {
-      command: 'voltar',
-      callback: () => history.push('/'),
-    },
-  ]
-
-  useSpeechRecognition({ commands })
-
-  function handleDelete(id:number) {
+  const deleteMaterial = (id: number) => {
     const filteredMaterials = materials.filter(material => material.id !== id)
     setMaterials(filteredMaterials)
   }
 
-  const { container, head, cell, cellData } = useStyles()
+  const { container, head, cell, cellData, icon, leftIcon, addButtonContainer } = useStyles()
 
   return (
     <>
@@ -89,53 +62,71 @@ export default function UserMaterialList() {
                 <TableCell className={cellData}>{author}</TableCell>
                 <TableCell className={cellData}>{user}</TableCell>
                 <TableCell className={cellData}>
-                  <EditIcon className='listIcons leftIcon' onClick={() => history.push('/material', { id })} />
-                  <DeleteIcon className='listIcons' onClick={() => handleDelete(id)} />
+                  <EditIcon
+                    className={leftIcon}
+                    onClick={() => history.push('/cadastrar-material', { id })}
+                  />
+                  <DeleteIcon
+                    className={icon}
+                    onClick={() => deleteMaterial(id)}
+                  />
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </Container>
-      <Container className='btnContainer'>
+      <Container className={addButtonContainer}>
         <Button
           color='secondary'
           variant='contained'
           size='large'
-          onClick={() => history.push('/material')}
+          onClick={() => history.push('/cadastrar-material')}
         >
-          Adicionar novo
+          Adicionar
         </Button>
       </Container>
     </>
   )
 }
 
-
-const requestMaterials = async (subject: string): Promise<Material[]> => {
-  try {
-    const { data } = await api.get('classes', { params: { subject } })
-    return data
-  } catch (error) {
-    alert(error.message || 'Nenhum professor foi encontrado')
-    return []
+const useStyles = makeStyles((theme: Theme) => {
+  const baseIcon = {
+    height: '2.4rem',
+    width: '2.4rem',
+    color: theme.palette.common.white,
+    cursor: 'pointer',
+    '&:hover': {
+      color: theme.palette.primary.light,
+    },
   }
-}
 
-const useStyles = makeStyles((theme: Theme) => ({
-  container: {
-    marginTop: '3.5rem',
-    padding: 0,
-    border: '1px solid',
-    borderColor: theme.palette.primary.dark,
-  },
-  head: {
-    backgroundColor: theme.palette.secondary.main,
-  },
-  cell: {
-    fontSize: '2rem',
-  },
-  cellData: {
-    fontSize: '1.2rem',
-  },
-}))
+  return {
+    container: {
+      marginTop: '3.5rem',
+      padding: 0,
+      border: '1px solid',
+      borderColor: theme.palette.primary.dark,
+    },
+    head: {
+      backgroundColor: theme.palette.secondary.main,
+    },
+    cell: {
+      fontSize: '2rem',
+    },
+    cellData: {
+      fontSize: '1.2rem',
+    },
+    icon: {
+      ...baseIcon,
+    },
+    leftIcon: {
+      ...baseIcon,
+      marginRight: '1rem',
+    },
+    addButtonContainer: {
+      textAlign: 'right',
+      padding: '2rem',
+    },
+  }
+})
