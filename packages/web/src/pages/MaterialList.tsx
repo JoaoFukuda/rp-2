@@ -31,7 +31,7 @@ export default function MaterialList() {
 
   return (
     <>
-      <PageHeader title={`Encontramos ${materials.length} materiais para: "${state.query}"`} />
+      <PageHeader title={`Encontramos ${materials.length} materiais para: "${query}"`} />
       <Container className={container} component={Paper}>
         <Table>
           <tbody>
@@ -56,14 +56,11 @@ export default function MaterialList() {
 }
 
 type Material = {
-  avatar: string
-  bio: string
   material: string
   name: string
-  phone: string
-  subject: string
   userId: string
 }
+
 const requestMaterials = async (subject: string): Promise<Material[]> => {
   try {
     const { data } = await api.get('classes', { params: { subject } })
