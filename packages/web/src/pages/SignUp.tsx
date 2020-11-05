@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -13,9 +13,10 @@ import {
 
 import PageHeader from '../components/PageHeader'
 import api from '@rp-2/axios'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 export default function SignUp() {
+  const history = useHistory()
   const { card, cardContent, sectionHeader, cardActions, lastSectionField, link, linkText } = useStyles()
 
   const [email, setEmail] = useState('')
@@ -23,13 +24,22 @@ export default function SignUp() {
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
 
+  useEffect(() => {
+    const user = localStorage.getItem('userId')
+
+    if (user) {
+      history.push('/materiais-do-professor')
+    }
+  }, [history])
+
   const signup = () => {
     api.post('signup', {
       email,
       password,
       name,
       phone,
-    }).then(() => {
+    }).then(response => {
+      localStorage.setItem('userId', response.data.id)
       alert('Cadastro realizado com sucesso!')
     }).catch(() => alert('Erro no cadastro!'))
   }
@@ -54,6 +64,7 @@ export default function SignUp() {
             name='password'
             label='Senha'
             value={password}
+            type='password'
             onChange={({ target }) => setPassword(target.value)}
             variant='outlined'
             margin='normal'

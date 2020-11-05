@@ -12,6 +12,10 @@ packages/coverage
 # production
 packages/build
 
+# uploads
+packages/server/src/uploads/*
+!packages/server/src/uploads/.gitkeep
+
 # misc
 .DS_Store
 .env

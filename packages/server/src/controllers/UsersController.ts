@@ -2,47 +2,35 @@ import { Request, Response } from 'express'
 
 import db from '../database'
 
-const index = async (req: Request, res: Response) => {
-  const { subject } = req.query
+const signin = async (req: Request, res: Response) => {
+  const { email, password } = req.body
 
-  const classes = await db('classes')
-    .where('classes.subject', 'LIKE', `%${subject}%`)
-    .join('users', 'classes.userId', '=', 'users.id')
-    .select(['classes.*', 'users.*'])
+  const users = await db('users')
+    .where('users.email', '=', `${email}`)
+    .where('users.password', '=', `${password}`)
+    .select('users.*')
 
-  if (!classes) return res.status(404).json({ errors: 'Nenhuma aula encontrada' })
+  if (!users) return res.status(404).json({ errors: 'Email ou senha incorretos' })
 
-  return res.json(classes)
+  return res.json(users[0])
 }
 
-const create = async (req: Request, res: Response) => {
+const signup = async (req: Request, res: Response) => {
   const {
-    avatar,
-    bio,
-    material,
+    email,
+    password,
     name,
     phone,
-    subject,
   } = req.body
 
-  const transaction = await db.transaction()
+  const insertedIds = await db('users').insert(
+    { email, password, name, phone },
+    'id',
+  )
 
-  try {
-    const insertedUserIds = await transaction('users').insert({ avatar, bio, name, phone }, 'id')
-    const userId = insertedUserIds[0]
+  const id = insertedIds[0]
 
-    await transaction('classes').insert({ material, subject, userId }, 'id')
-
-    await transaction.commit()
-
-    return res.sendStatus(201)
-  } catch (err) {
-    await transaction.rollback()
-
-    return res.status(err.status || 400).json({
-      error: err.message || 'Ocorreu um erro inesperado',
-    })
-  }
+  return res.status(201).json({ id })
 }
 
-export default { index, create }
+export default { signup, signin }

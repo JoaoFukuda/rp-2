@@ -37,11 +37,15 @@ export default function MaterialList() {
           <tbody>
             <TableRow className={head}>
               <TableCell className={cell}>Título</TableCell>
-              <TableCell className={cell}>Professor</TableCell>
+              <TableCell className={cell}>Autor</TableCell>
+              <TableCell className={cell}>Categoria</TableCell>
+              <TableCell className={cell}>Usuário</TableCell>
             </TableRow>
-            {materials.map(({ name, material }) => (
-              <TableRow key={material}>
-                <TableCell className={cell}>{material}</TableCell>
+            {materials.map(({ name, title, author, subject }) => (
+              <TableRow key={title}>
+                <TableCell className={cell}>{title}</TableCell>
+                <TableCell className={cell}>{author}</TableCell>
+                <TableCell className={cell}>{subject}</TableCell>
                 <TableCell className={cell}>{name}</TableCell>
               </TableRow>
             ))}
@@ -56,14 +60,16 @@ export default function MaterialList() {
 }
 
 type Material = {
-  material: string
+  title: string
+  author: string
+  subject: string
   name: string
   userId: string
 }
 
-const requestMaterials = async (subject: string): Promise<Material[]> => {
+const requestMaterials = async (query: string): Promise<Material[]> => {
   try {
-    const { data } = await api.get('classes', { params: { subject } })
+    const { data } = await api.get('materials', { params: { query } })
     return data
   } catch (error) {
     alert(error.message || 'Nenhum professor foi encontrado')

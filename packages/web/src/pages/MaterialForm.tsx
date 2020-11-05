@@ -12,33 +12,40 @@ import {
   Theme,
 } from '@material-ui/core'
 import { DropzoneArea } from 'material-ui-dropzone'
-
+import { useHistory } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import api from '@rp-2/axios'
 
 export default function MaterialForm() {
   const classes = useStyles()
+  const history = useHistory()
 
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
-  const [lesson, setLesson] = useState('')
+  const [subject, setSubject] = useState('')
   const [file, setFile] = useState<File>()
 
   const addMaterial = () => {
-    api.post('materials', {
-      title,
-      author,
-      lesson,
-      file,
-      teacherId: 1,
-    }).then(() => {
-      alert('Material adicionado com sucesso!')
+    const userId = localStorage.getItem('userId')
+
+    if (!userId || !file) return
+
+    const data = new FormData()
+
+    data.append('file', file)
+    data.append('title', title)
+    data.append('author', author)
+    data.append('subject', subject)
+    data.append('userId', userId)
+
+    api.post('materials', data).then(() => {
+      history.push('/materiais-do-professor')
     }).catch(() => alert('Erro ao adicionar material!'))
   }
 
   return (
     <>
-      <PageHeader title='Cadastrar materiais de aula'/>
+      <PageHeader title='Cadastrar materiais'/>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant='h3' className={classes.sectionHeader}>Dados do material</Typography>
@@ -61,10 +68,10 @@ export default function MaterialForm() {
           />
           <TextField
             className={classes.marginBottom}
-            name='lesson'
-            label='Aula'
-            value={lesson}
-            onChange={({ target }) => setLesson(target.value)}
+            name='subject'
+            label='Categoria'
+            value={subject}
+            onChange={({ target }) => setSubject(target.value)}
             variant='outlined'
             margin='normal'
           />

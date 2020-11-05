@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Button,
   Card,
@@ -13,19 +13,29 @@ import {
 
 import PageHeader from '../components/PageHeader'
 import api from '@rp-2/axios'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 export default function SignIn() {
   const { card, cardContent, sectionHeader, cardActions, link, linkText } = useStyles()
+  const history = useHistory()
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+
+  useEffect(() => {
+    const user = localStorage.getItem('userId')
+
+    if (user) {
+      history.push('/materiais-do-professor')
+    }
+  }, [history])
 
   const signin = () => {
     api.post('signin', {
       email,
       password,
-    }).then(() => {
+    }).then(response => {
+      localStorage.setItem('userId', response.data.id)
       alert('Você entrou!')
     }).catch(() => alert('Erro ao tentar entrar!'))
   }
@@ -49,6 +59,7 @@ export default function SignIn() {
             name='password'
             label='Senha'
             value={password}
+            type='password'
             onChange={({ target }) => setPassword(target.value)}
             variant='outlined'
             margin='normal'
