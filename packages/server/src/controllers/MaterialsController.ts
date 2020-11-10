@@ -68,8 +68,14 @@ const update = async (req: Request, res: Response) => {
 
   const file = req.file
 
+  const updatePayload = { title, author, subject }
+
+  if (file) {
+    Object.assign(updatePayload, { file: file.filename })
+  }
+
   await db('materials')
-    .update({ title, author, subject, file: file.filename })
+    .update(updatePayload)
     .where('id', id)
 
   return res.status(204).json({ updated: true })

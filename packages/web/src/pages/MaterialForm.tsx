@@ -68,11 +68,14 @@ export default function MaterialForm() {
   const updateMaterial = () => {
     const userId = localStorage.getItem('userId')
 
-    if (!userId || !file || !materialId) return
+    if (!userId || !materialId) return
 
     const data = new FormData()
 
-    data.append('file', file)
+    if (file) {
+      data.append('file', file)
+    }
+
     data.append('title', title)
     data.append('author', author)
     data.append('subject', subject)

@@ -36,7 +36,6 @@ export default function SignIn() {
       password,
     }).then(response => {
       localStorage.setItem('userId', response.data.id)
-      alert('Você entrou!')
       history.push('/materiais-do-professor')
     }).catch(() => alert('Erro ao tentar entrar!'))
   }
