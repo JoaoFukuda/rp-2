@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -12,11 +12,18 @@ import {
   Theme,
 } from '@material-ui/core'
 import { DropzoneArea } from 'material-ui-dropzone'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import PageHeader from '../components/PageHeader'
 import api from '@rp-2/axios'
+import { Material } from '../types'
+import { AxiosResponse } from 'axios'
+
+type MaterialFormState = {
+  materialId?: string
+}
 
 export default function MaterialForm() {
+  const { state } = useLocation<MaterialFormState>()
   const classes = useStyles()
   const history = useHistory()
 
@@ -24,6 +31,21 @@ export default function MaterialForm() {
   const [author, setAuthor] = useState('')
   const [subject, setSubject] = useState('')
   const [file, setFile] = useState<File>()
+
+  const materialId = state?.materialId
+
+  useEffect(() => {
+    if (materialId) {
+      api.get(`material/${materialId}`).then(({ data }: AxiosResponse<Material>) => {
+        const { author, subject, title, file } = data
+
+        setTitle(title)
+        setAuthor(author)
+        setSubject(subject)
+        // setFile(file)
+      }).catch(error => alert(error))
+    }
+  }, [materialId])
 
   const addMaterial = () => {
     const userId = localStorage.getItem('userId')
@@ -43,9 +65,27 @@ export default function MaterialForm() {
     }).catch(() => alert('Erro ao adicionar material!'))
   }
 
+  const updateMaterial = () => {
+    const userId = localStorage.getItem('userId')
+
+    if (!userId || !file || !materialId) return
+
+    const data = new FormData()
+
+    data.append('file', file)
+    data.append('title', title)
+    data.append('author', author)
+    data.append('subject', subject)
+    data.append('id', materialId)
+
+    api.put('materials', data).then(() => {
+      history.push('/materiais-do-professor')
+    }).catch(() => alert('Erro ao adicionar material!'))
+  }
+
   return (
     <>
-      <PageHeader title='Cadastrar materiais'/>
+      <PageHeader title={materialId ? 'Atualizar material' : 'Cadastrar material'}/>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography variant='h3' className={classes.sectionHeader}>Dados do material</Typography>
@@ -100,9 +140,9 @@ export default function MaterialForm() {
             color='secondary'
             variant='contained'
             size='large'
-            onClick={addMaterial}
+            onClick={materialId ? updateMaterial : addMaterial}
           >
-              Cadastrar material
+            {materialId ? 'Atualizar material' : 'Cadastrar material'}
           </Button>
         </CardActions>
       </Card>

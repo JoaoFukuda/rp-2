@@ -16,13 +16,7 @@ import React, { useState, useEffect } from 'react'
 import { useHistory } from 'react-router-dom'
 import api from '@rp-2/axios'
 import PageHeader from '../components/PageHeader'
-
-type Material = {
-  id: number,
-  title: string,
-  author: string,
-  subject: string,
-}
+import { Material } from '../types'
 
 export default function UserMaterialList() {
   const [materials, setMaterials] = useState<Material[]>([])
@@ -68,7 +62,7 @@ export default function UserMaterialList() {
                 <TableCell className={iconsCellData} >
                   <EditIcon
                     className={leftIcon}
-                    onClick={() => history.push('/cadastrar-material', { id })}
+                    onClick={() => history.push('/cadastrar-materiais', { materialId: id })}
                   />
                   <DeleteIcon
                     className={icon}

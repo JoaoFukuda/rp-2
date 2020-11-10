@@ -41,6 +41,7 @@ export default function SignUp() {
     }).then(response => {
       localStorage.setItem('userId', response.data.id)
       alert('Cadastro realizado com sucesso!')
+      history.push('/materiais-do-professor')
     }).catch(() => alert('Erro no cadastro!'))
   }
 

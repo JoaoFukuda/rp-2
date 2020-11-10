@@ -2,11 +2,23 @@ import { Request, Response } from 'express'
 
 import db from '../database'
 
-const index = async (req: Request, res: Response) => {
+const show = async (req: Request, res: Response) => {
   const { id } = req.params
 
+  const material = await db('materials')
+    .where('materials.id', '=', id)
+    .select('materials.*')
+
+  if (!material[0]) return res.status(404).json({ errors: 'Aula não encontrada' })
+
+  return res.status(200).json(material[0])
+}
+
+const index = async (req: Request, res: Response) => {
+  const { userId } = req.params
+
   const materials = await db('materials')
-    .where('materials.userId', '=', `${id}`)
+    .where('materials.userId', '=', `${userId}`)
     .select('materials.*')
 
   if (!materials) return res.status(404).json({ errors: 'Nenhuma aula encontrada' })
@@ -52,20 +64,23 @@ const update = async (req: Request, res: Response) => {
     title,
     author,
     subject,
-    file,
   } = req.body
 
-  await db('materials').update(id, { title, author, subject, file })
+  const file = req.file
+
+  await db('materials')
+    .update({ title, author, subject, file: file.filename })
+    .where('id', id)
 
   return res.status(204).json({ updated: true })
 }
 
 const destroy = async (req: Request, res: Response) => {
   const { id } = req.params
-  console.log(id)
+
   await db('materials').where('id', id).del()
 
   return res.status(200).json({ deleted: true })
 }
 
-export default { index, search, create, update, destroy }
+export default { show, index, search, create, update, destroy }

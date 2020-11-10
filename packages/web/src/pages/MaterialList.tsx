@@ -13,6 +13,7 @@ import api from '@rp-2/axios'
 
 import PageHeader from '../components/PageHeader'
 import SearchForm from '../components/SearchForm'
+import { Material } from '../types'
 
 type MaterialListState = {
   query: string
@@ -57,14 +58,6 @@ export default function MaterialList() {
       </Container>
     </>
   )
-}
-
-type Material = {
-  title: string
-  author: string
-  subject: string
-  name: string
-  userId: string
 }
 
 const requestMaterials = async (query: string): Promise<Material[]> => {
