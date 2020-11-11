@@ -9,8 +9,17 @@ export default function SearchForm() {
 
   const [title, setTitle] = useState('')
 
+  const speak = () => {
+    const textToSpeak = new SpeechSynthesisUtterance(
+      'Me dá uma mamada gostosa aqui, bem delicinha heuheuheueh',
+    )
+    textToSpeak.lang = 'pt-BR'
+    speechSynthesis.speak(textToSpeak)
+  }
+
   useEffect(() => {
     SpeechRecognition.startListening({ language: 'pt-BR', continuous: true })
+    setTimeout(speak, 3000)
   }, [])
 
   const commands = [
@@ -37,6 +46,7 @@ export default function SearchForm() {
       <Typography variant='h3' className={head}>
         Fale "Pesquisar sobre" seguido do título do material que deseja encontrar
       </Typography>
+      <button onClick={() => speak()}>Testar</button>
       <TextField
         className={input}
         label='Digite aqui o título do material'

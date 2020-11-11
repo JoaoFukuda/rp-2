@@ -18,6 +18,7 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
+    "react-speech": "^1.0.2",
     "react-speech-kit": "^3.0.1",
     "react-speech-recognition": "^3.2.3",
     "ts-jest": "^26.1.4",
