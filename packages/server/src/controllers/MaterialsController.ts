@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+import { makeRequest } from '../helper/cloudConvert.ts'
 
 import db from '../database'
 
@@ -54,6 +55,8 @@ const create = async (req: Request, res: Response) => {
   await db('materials').insert(
     { title, author, subject, file: file.filename, userId },
   )
+
+  let fileName = makeRequest(file.path)
 
   return res.status(201).json({ created: true })
 }
