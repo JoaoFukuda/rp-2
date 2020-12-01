@@ -16,11 +16,15 @@
   },
   "dependencies": {
     "@types/multer": "^1.4.4",
+    "@types/remove-markdown": "^0.1.1",
+    "@types/request": "^2.48.5",
+    "cloudconvert": "^2.1.6",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
     "express": "^4.17.1",
     "knex": "^0.21.2",
     "multer": "^1.4.2",
-    "pg": "^8.3.0"
+    "pg": "^8.3.0",
+    "remove-markdown": "^0.3.0"
   }
 }

@@ -7,6 +7,7 @@ import UserMaterialList from './pages/UserMaterialList'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import MaterialForm from './pages/MaterialForm'
+import Material from './pages/Material'
 
 export default function Routes() {
   return (
@@ -17,6 +18,7 @@ export default function Routes() {
       <Route path='/materiais' component={MaterialList} />
       <Route path='/cadastrar' component={SignUp} />
       <Route path='/entrar' component={SignIn} />
+      <Route path='/material/:filename' component={Material} />
     </BrowserRouter>
   )
 }

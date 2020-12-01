@@ -8,7 +8,7 @@ import {
   Theme,
 } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useHistory } from 'react-router-dom'
 import api from '@rp-2/axios'
 
 import PageHeader from '../components/PageHeader'
@@ -20,6 +20,7 @@ type MaterialListState = {
 }
 
 export default function MaterialList() {
+  const history = useHistory()
   const { state } = useLocation<MaterialListState>()
   const [materials, setMaterials] = useState<Material[]>([])
   const query = state?.query
@@ -42,8 +43,8 @@ export default function MaterialList() {
               <TableCell className={cell}>Categoria</TableCell>
               <TableCell className={cell}>Usuário</TableCell>
             </TableRow>
-            {materials.map(({ name, title, author, subject }) => (
-              <TableRow key={title}>
+            {materials.map(({ name, title, author, subject, file }) => (
+              <TableRow key={title} onClick={() => history.push(`/material/${file}`)}>
                 <TableCell className={cell}>{title}</TableCell>
                 <TableCell className={cell}>{author}</TableCell>
                 <TableCell className={cell}>{subject}</TableCell>

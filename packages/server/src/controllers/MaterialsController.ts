@@ -1,18 +1,21 @@
 import { Request, Response } from 'express'
-import { makeRequest } from '../helper/cloudConvert.ts'
+import { makeRequest } from '../helper/cloudConvert'
+import { removeMarkdown } from '../helper/removeMarkdown'
+import fs from 'fs'
+import path from 'path'
 
 import db from '../database'
 
 const show = async (req: Request, res: Response) => {
-  const { id } = req.params
+  const { filename } = req.params
 
-  const material = await db('materials')
-    .where('materials.id', '=', id)
-    .select('materials.*')
+  const fileText = fs.readFileSync(path.join(__dirname, '..', 'uploads', filename), { encoding: 'utf8' })
 
-  if (!material[0]) return res.status(404).json({ errors: 'Aula não encontrada' })
+  const removedMd = removeMarkdown(fileText)
 
-  return res.status(200).json(material[0])
+  if (!removedMd) return res.status(404).json({ errors: 'Aula não encontrada' })
+
+  return res.status(200).json(removedMd)
 }
 
 const index = async (req: Request, res: Response) => {
@@ -50,13 +53,21 @@ const create = async (req: Request, res: Response) => {
     userId,
   } = req.body
 
-  const file = req.file
+  const { file } = req
+
+  if (!/\.tex$/.test(file.path)) {
+    return res.status(422).json({ created: false })
+  }
+
+  const fullPath = await makeRequest(file.path) as string
+
+  const splittedPath = fullPath.split('\\')
+
+  const filename = splittedPath[splittedPath.length - 1]
 
   await db('materials').insert(
-    { title, author, subject, file: file.filename, userId },
+    { title, author, subject, file: filename, userId },
   )
-
-  let fileName = makeRequest(file.path)
 
   return res.status(201).json({ created: true })
 }
@@ -75,6 +86,8 @@ const update = async (req: Request, res: Response) => {
 
   if (file) {
     Object.assign(updatePayload, { file: file.filename })
+
+    await makeRequest(file.path)
   }
 
   await db('materials')

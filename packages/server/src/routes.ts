@@ -9,7 +9,7 @@ const upload = multer(uploadConfig.multer)
 
 const routes = express.Router()
 
-routes.get('/material/:id', materialsController.show)
+routes.get('/material/:filename', materialsController.show)
 routes.get('/materials/:userId', materialsController.index)
 routes.get('/materials', materialsController.search)
 routes.post('/materials', upload.single('file'), materialsController.create)
