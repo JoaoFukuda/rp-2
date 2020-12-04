@@ -15,6 +15,7 @@ packages/build
 # uploads
 packages/server/src/uploads/*
 !packages/server/src/uploads/.gitkeep
+!packages/server/src/uploads/audios/.gitkeep
 
 # misc
 .DS_Store

@@ -29,7 +29,7 @@ export default function MaterialList() {
     requestMaterials(query || '').then(setMaterials)
   }, [query])
 
-  const { container, head, cell, searchContainer } = useStyles()
+  const { container, head, cell, searchContainer, row } = useStyles()
 
   return (
     <>
@@ -44,7 +44,7 @@ export default function MaterialList() {
               <TableCell className={cell}>Usuário</TableCell>
             </TableRow>
             {materials.map(({ name, title, author, subject, file }) => (
-              <TableRow key={title} onClick={() => history.push(`/material/${file}`)}>
+              <TableRow key={title} className={row} onClick={() => history.push(`/material/${file}`)}>
                 <TableCell className={cell}>{title}</TableCell>
                 <TableCell className={cell}>{author}</TableCell>
                 <TableCell className={cell}>{subject}</TableCell>
@@ -93,5 +93,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginBottom: '2rem',
     border: '1px solid',
     borderColor: theme.palette.primary.dark,
+  },
+  row: {
+    cursor: 'pointer',
   },
 }))

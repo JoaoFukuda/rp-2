@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import { makeRequest } from '../helper/cloudConvert'
 import { removeMarkdown } from '../helper/removeMarkdown'
+import { processTTS } from '../helper/textToSpeech'
 import fs from 'fs'
 import path from 'path'
 
@@ -60,6 +61,9 @@ const create = async (req: Request, res: Response) => {
   }
 
   const fullPath = await makeRequest(file.path) as string
+
+  console.log('full', fullPath, file.filename)
+  processTTS(fullPath, file.filename)
 
   const splittedPath = fullPath.split('\\')
 
