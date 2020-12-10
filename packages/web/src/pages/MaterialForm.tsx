@@ -37,12 +37,11 @@ export default function MaterialForm() {
   useEffect(() => {
     if (materialId) {
       api.get(`material/${materialId}`).then(({ data }: AxiosResponse<Material>) => {
-        const { author, subject, title, file } = data
+        const { author, subject, title } = data
 
         setTitle(title)
         setAuthor(author)
         setSubject(subject)
-        // setFile(file)
       }).catch(error => alert(error))
     }
   }, [materialId])

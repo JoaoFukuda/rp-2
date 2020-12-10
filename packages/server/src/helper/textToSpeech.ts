@@ -2,6 +2,7 @@ import fs from 'fs'
 import TextToSpeechV1 from 'ibm-watson/text-to-speech/v1'
 import { IamAuthenticator } from 'ibm-watson/auth'
 import path from 'path'
+import { Readable } from 'stream'
 
 const textToSpeech = new TextToSpeechV1({
   authenticator: new IamAuthenticator({
@@ -11,6 +12,8 @@ const textToSpeech = new TextToSpeechV1({
 })
 
 export function processTTS(filePath: string, fileName: string): void {
+  console.log('filepath', filePath)
+
   fs.readFile(filePath, 'utf-8', (err, data) => {
     if (err) console.log('Não foi possível salvar o arquivo')
 
@@ -24,10 +27,13 @@ export function processTTS(filePath: string, fileName: string): void {
       .then(response => {
         // only necessary for wav formats,
         // otherwise `response.result` can be directly piped to a file
-        return textToSpeech.repairWavHeaderStream(response.result)
+        return textToSpeech.repairWavHeaderStream(response.result as Readable)
       })
       .then(buffer => {
-        fs.writeFileSync(path.join(__dirname, '..', 'uploads', 'audios', `${fileName}.wav`), buffer)
+        fs.writeFileSync(path.join(__dirname, '..', 'uploads',
+          'audios',
+          `${fileName.replace('.txt', '')}.wav`),
+        buffer)
       })
       .catch(err => {
         console.log('error:', err)

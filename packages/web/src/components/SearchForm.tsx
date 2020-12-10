@@ -1,5 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
-import { Typography, TextField, Button, makeStyles } from '@material-ui/core'
+import { Typography, TextField, Button, makeStyles, FormControl } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
@@ -24,11 +24,12 @@ export default function SearchForm() {
     },
   ]
 
-  const { transcript } = useSpeechRecognition({ commands })
+  useSpeechRecognition({ commands })
 
   const { input, button, head } = useStyles()
 
-  const onSearch = () => {
+  const onSearch = (e: any) => {
+    e.preventDefault()
     history.push('/materiais', { query: title })
   }
 
@@ -37,23 +38,25 @@ export default function SearchForm() {
       <Typography variant='h3' className={head}>
         Fale "Pesquisar sobre" seguido do título do material que deseja encontrar
       </Typography>
-      <TextField
-        className={input}
-        label='Digite aqui o título do material'
-        margin='normal'
-        onChange={({ target }) => setTitle(target.value)}
-        value={title}
-        variant='outlined'
-      />
-      <Button
-        className={button}
-        color='secondary'
-        onClick={onSearch}
-        variant='contained'
-      >
-        Pesquisar
-      </Button>
-      <p>{transcript}</p>
+      <FormControl onSubmit={onSearch}>
+        <TextField
+          className={input}
+          label='Digite aqui o título do material'
+          margin='normal'
+          onChange={({ target }) => setTitle(target.value)}
+          value={title}
+          variant='outlined'
+        />
+        <Button
+          className={button}
+          type='submit'
+          color='secondary'
+          onClick={onSearch}
+          variant='contained'
+        >
+          Pesquisar
+        </Button>
+      </FormControl>
     </>
   )
 }
@@ -63,12 +66,14 @@ const useStyles = makeStyles(() => ({
     textAlign: 'center',
   },
   input: {
-    margin: '3rem 3rem 1rem 3rem',
+    marginTop: '2rem',
+    marginBottem: '1rem',
     width: '30rem',
   },
   button: {
     width: '30rem',
     height: '3rem',
     fontSize: '1.4rem',
+    marginBottom: '2rem',
   },
 }))

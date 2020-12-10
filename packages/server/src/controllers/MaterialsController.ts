@@ -35,9 +35,9 @@ const search = async (req: Request, res: Response) => {
   const { query } = req.query
 
   const materials = await db('materials')
-    .where('materials.subject', 'LIKE', `%${query}%`)
-    .orWhere('materials.author', 'LIKE', `%${query}%`)
-    .orWhere('materials.title', 'LIKE', `%${query}%`)
+    .where('materials.subject', 'iLIKE', `%${query}%`)
+    .orWhere('materials.author', 'iLIKE', `%${query}%`)
+    .orWhere('materials.title', 'iLIKE', `%${query}%`)
     .join('users', 'materials.userId', '=', 'users.id')
     .select(['materials.*', 'users.*'])
 
@@ -62,8 +62,11 @@ const create = async (req: Request, res: Response) => {
 
   const fullPath = await makeRequest(file.path) as string
 
-  console.log('full', fullPath, file.filename)
-  processTTS(fullPath, file.filename)
+  const fullPathTxt = fullPath.replace('tex', 'txt')
+  const txtFilename = file.filename.replace('tex', 'txt')
+
+  console.log('full', fullPathTxt, txtFilename)
+  processTTS(fullPathTxt, txtFilename)
 
   const splittedPath = fullPath.split('\\')
 

@@ -1,36 +1,88 @@
 import React, { useEffect, useState } from 'react'
-import { Container, makeStyles, Theme } from '@material-ui/core'
-import { useRouteMatch } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
+import { Container, makeStyles } from '@material-ui/core'
+import { useRouteMatch, useHistory } from 'react-router-dom'
 import api from '@rp-2/axios'
-// eslint-disable-next-line
-// @ts-ignore
-import { useSpeechSynthesis } from 'react-speech-kit'
-// eslint-disable-next-line
-// @ts-ignore
-import FileViewer from 'react-file-viewer'
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition'
 
 export default function Material() {
+  const history = useHistory()
   const { params: { filename } } = useRouteMatch<{ filename: string }>()
   const { container, textContainer } = useStyles()
   const [text, setText] = useState('')
-  const [markdown, setMarkdown] = useState('')
-  const { speak, voices, speaking } = useSpeechSynthesis()
 
   useEffect(() => {
-    fetch(`http://localhost:8080/${filename}`)
-      .then(r => r.text())
-      .then(mdText => {
-        setMarkdown(mdText)
-      })
+    SpeechRecognition.startListening({ language: 'pt-BR', continuous: true })
+  }, [])
 
+  const commands = [
+    {
+      command: 'reproduz',
+      callback: playTextAudio,
+    },
+    {
+      command: 'reproduza',
+      callback: playTextAudio,
+    },
+    {
+      command: 'comece',
+      callback: playTextAudio,
+    },
+    {
+      command: 'play',
+      callback: playTextAudio,
+    },
+    {
+      command: 'continue',
+      callback: playTextAudio,
+    },
+    {
+      command: 'continua',
+      callback: playTextAudio,
+    },
+    {
+      command: 'pause',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'pausa',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'pare',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'para',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'espere',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'espera',
+      callback: pauseTextAudio,
+    },
+    {
+      command: 'voltar',
+      callback: () => history.goBack(),
+    },
+  ]
+
+  useSpeechRecognition({ commands })
+
+  useEffect(() => {
     api.get(`/material/${filename}`).then(({ data }) => {
       setText(data)
     })
-  }, [])
+  }, [filename])
 
   return (
-    <Container >
+    <Container className={container}>
+      <audio controls id='textAudio'>
+        <source src={`http://localhost:8080/audios/${filename.replace('.txt', '.wav')}`} type='audio/ogg' />
+      </audio>
+
       <div className={textContainer}>
         {text}
       </div>
@@ -39,9 +91,25 @@ export default function Material() {
   )
 }
 
-const useStyles = makeStyles((theme: Theme) => ({
+function playTextAudio() {
+  const audio = document.getElementById('textAudio') as HTMLAudioElement
+
+  audio.play()
+}
+
+function pauseTextAudio() {
+  const audio = document.getElementById('textAudio') as HTMLAudioElement
+
+  audio.pause()
+}
+
+const useStyles = makeStyles(() => ({
   container: {
-    backgroundColor: theme.palette.primary.dark,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    marginTop: '2rem',
   },
   textContainer: {
     color: '#000',

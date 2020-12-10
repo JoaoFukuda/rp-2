@@ -1,6 +1,8 @@
 import React from 'react'
 import { Container, makeStyles, Theme, Typography } from '@material-ui/core'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import HomeIcon from '@material-ui/icons/Home'
+
 import { useHistory } from 'react-router-dom'
 
 type PageHeaderProps = { title: string }
@@ -20,6 +22,7 @@ export default function PageHeader({ title }: PageHeaderProps) {
         <ExitToAppIcon id='exitIcon' />
         <Typography>Sair</Typography>
       </div>)}
+      <HomeIcon className={classes.homeIcon} onClick={() => history.push('/')} />
       <Typography variant='h3' className={classes.text}>
         {title}
       </Typography>
@@ -49,5 +52,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '50px',
     cursor: 'pointer',
     width: '50px',
+  },
+  homeIcon: {
+    position: 'absolute',
+    top: '35px',
+    height: '35px',
+    cursor: 'pointer',
+    width: '35px',
   },
 }))
